@@ -1,0 +1,48 @@
+$date
+     Aug 17, 2018       00:19:06
+$end
+
+$version
+ SystemC 2.3.2-Accellera --- Jun 11 2018 14:13:11
+$end
+
+$timescale
+     1 ms
+$end
+
+$scope module SystemC $end
+$scope module REGDEC $end
+$var wire    8  aaaaa  phase [7:0]  $end
+$var wire    3  aaaab  freq2 [2:0]  $end
+$var wire    4  aaaac  freq1 [3:0]  $end
+$var wire    3  aaaad  offset [2:0]  $end
+$var wire   32  aaaae  amplitude [31:0]  $end
+$var wire    3  aaaaf  sel [2:0]  $end
+$var wire   32  aaaag  instruction [31:0]  $end
+$upscope $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b0 aaaaa
+b0 aaaab
+b0 aaaac
+b0 aaaad
+b0 aaaae
+b0 aaaaf
+b0 aaaag
+$end
+
+#10
+b11 aaaab
+b10 aaaac
+b11 aaaad
+b100 aaaae
+b1 aaaaf
+b110010011100001 aaaag
+
+#50
