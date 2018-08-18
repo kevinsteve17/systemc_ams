@@ -10,7 +10,7 @@ SC_MODULE(instRegDec)
     sc_in<int> instruction;
 
     sc_out<sc_int<3>> sel;
-    sc_out<sc_int<32>> amplitude;
+    sc_out<sc_int<3>> amplitude;
     sc_out<sc_int<3>> offset;
     sc_out<sc_int<4>> freq1;
     sc_out<sc_int<3>> freq2;

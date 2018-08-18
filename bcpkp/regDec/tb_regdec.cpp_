@@ -7,7 +7,7 @@ int sc_main (int argc, char* argv[])
     sc_signal< int > instruction;
 
     sc_signal<sc_int<3>> sel;
-    sc_signal< sc_int<32> > amplitude;
+    sc_signal< sc_int<3> > amplitude;
     sc_signal< sc_int<3> > offset;
     sc_signal< sc_int<4> > freq1;
     sc_signal< sc_int<3> > freq2;
