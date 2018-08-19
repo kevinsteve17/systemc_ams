@@ -3,7 +3,7 @@
  *
  *  Diseño de Alto Nivel de Sistema Electrónicos
  *
- *  Proyecto 2 (Grupo 1)
+ *  Proyecto 3 (Grupo 1)
  *
  *  Mario Castro    200827325
  *  Diego Herrera   200324558
