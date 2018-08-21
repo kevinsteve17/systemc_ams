@@ -39,9 +39,7 @@ tlm::tlm_sync_enum Router::nb_transport_fw(int id, tlm::tlm_generic_payload& tra
               << ", Transaction: " << decode_transID(trans.get_address())
               << ", Phase: " << phase
               << ", SRC: " << decode_src(trans.get_address())
-              << ", DST: " << decode_dest(trans.get_address())
-              << ", Delay: " << delay
-              << ", Time: " << sc_time_stamp() << "\n";
+              << ", DST: " << decode_dest(trans.get_address()) << "\n";
 
     tlm::tlm_sync_enum status;
 
@@ -77,9 +75,7 @@ tlm::tlm_sync_enum Router::nb_transport_bw(int id, tlm::tlm_generic_payload& tra
               << ", Transaction: " << decode_transID(trans.get_address())
               << ", Phase: " << phase
               << ", SRC: " << decode_src(trans.get_address())
-              << ", DST: " << decode_dest(trans.get_address())
-              << ", Delay: " << delay
-              << ", Time: " << sc_time_stamp() << "\n";
+              << ", DST: " << decode_dest(trans.get_address()) << "\n";
 
     return init_socket[0]->nb_transport_fw(trans, phase, delay);
 }

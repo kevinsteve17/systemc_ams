@@ -23,12 +23,12 @@ SC_MODULE(instRegDec)
     // port definition
     sc_in<int> instruction;
 
-    sc_out<sc_int<3>> sel;
-    sc_out<sc_int<3>> amplitude;
-    sc_out<sc_int<3>> offset;
-    sc_out<sc_int<4>> freq1;
-    sc_out<sc_int<3>> freq2;
-    sc_out<sc_int<8>> phase;
+    sc_out<int> sel;
+    sc_out<int> amplitude;
+    sc_out<int> offset;
+    sc_out<int> freq1;
+    sc_out<int> freq2;
+    sc_out<int> phase;
 
     // methods
     void decodeWaveSelector();

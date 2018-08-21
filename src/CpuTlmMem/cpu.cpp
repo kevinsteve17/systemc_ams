@@ -28,28 +28,20 @@ CPU::CPU(sc_core::sc_module_name module_name, unsigned int id)
     SC_THREAD(thread_process);
 }
 
-void CPU::thread_process()
+void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data)
 {
-    tlm::tlm_generic_payload* trans;
+
     tlm::tlm_phase phase;
     sc_time delay;
 
-    // Generate a sequence of random transactions
-    int begin = cpu_id * NUM_TRANSACTIONS;
-    int end = begin + NUM_TRANSACTIONS;
+        int adr = 7;
 
-    for (int i = begin; i < end; i++)
-    {
-        wait(sc_time(50, SC_MS));
+        adr = compose_address(0, cpu_id, TOP_ROUTER, adr);
 
-        int adr = 7;//rand() % MEMORY_SIZE;
-
-        adr = compose_address(i, cpu_id, TOP_ROUTER, adr);
-
-        tlm::tlm_command cmd = tlm::TLM_WRITE_COMMAND;//static_cast<tlm::tlm_command>(rand() % 2);
+        tlm::tlm_command cmd = tlm::TLM_WRITE_COMMAND; 
         
         if (cmd == tlm::TLM_WRITE_COMMAND) {
-            data = 25825;//rand();
+            data = _data; 
         }
 
         // Grab a new transaction from the memory manager
@@ -78,7 +70,7 @@ void CPU::thread_process()
         delay = sc_time(rand_ps(), SC_PS);
         
         std::cout << ">>>>>>>>>> Outgoing msg from CPU: " << cpu_id
-                  << ", Transaction: " << i
+                  << ", Transaction: " << 0
                   << ", Phase: " << phase
                   << ", Cmd: " << (cmd ? 'W' : 'R')
                   << ", Addr: " << dec << decode_addr(adr)
@@ -106,10 +98,47 @@ void CPU::thread_process()
             check_transaction( *trans );
         }
 
-        wait(sc_time(rand_ps(), SC_NS));
-    }
+    wait(sc_time(rand_ps(), SC_NS));
 
-    std::cout << "Done!\n";
+    std::cout << "Done!\n";  
+    std::cout << "\n";  
+}
+
+int CPU::generateWaveGenInstruction(int amp, int offset, int sel, int freq1, int freq2, int phase)
+{
+    int instruction = 0;
+
+    instruction = (amp<<3) | (offset<<6) | (freq1<<9) | (freq2<<13) | (phase<<16) | sel;
+
+    cout << "#### INSTRUCTION= " << instruction << " -> ( offset: " << offset << ", amp: " << amp << ", freq1: " << freq1 << ", freq2: " << freq2 << ", waveType: " << sel << ")";
+    cout << "\n";
+    return instruction;
+}
+
+void CPU::thread_process()
+{
+    tlm::tlm_generic_payload* trans;
+    int instruction = 0;
+
+    // amp, offset, sel, freq1, freq2, phase
+    wait(sc_time(1, SC_MS));
+    instruction = generateWaveGenInstruction(4,0,1,2,3,0);
+    generateTransaction(trans, instruction);  // --> 0 + 4*sin(2k)
+
+    // amp, offset, sel, freq1, freq2, phase
+    wait(sc_time(2, SC_MS));
+    instruction = generateWaveGenInstruction(4,2,1,1,3,0);
+    generateTransaction(trans, instruction);  // --> 3 + 4*sin(1k)  
+
+    // amp, offset, sel, freq1, freq2, phase
+    wait(sc_time(2, SC_MS));
+    instruction = generateWaveGenInstruction(2,0,2,10,3,0);
+    generateTransaction(trans, instruction);  // --> 0 + 2*triang(10k)
+
+    // amp, offset, sel, freq1, freq2, phase
+    wait(sc_time(2, SC_MS));
+    instruction = generateWaveGenInstruction(2,0,0,5,3,0);
+    generateTransaction(trans, instruction);  // --> 0 + 2*square(5k)         
 }
 
 tlm::tlm_sync_enum CPU::nb_transport_bw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_time& delay)

@@ -55,12 +55,9 @@ tlm::tlm_sync_enum Memory::nb_transport_fw(tlm::tlm_generic_payload& trans,
               << ", Transaction: " << decode_transID(trans.get_address())
               << ", Phase: " << phase
               << ", Addr: " << dec << decode_addr(adr)
-              << ", Msg len: " << len
               << ", Data: " << *reinterpret_cast<int *>(&byt)
               << ", SRC: " << decode_src(trans.get_address())
-              << ", DST: " << decode_dest(trans.get_address())
-              << ", Delay: " << delay
-              << ", Time: " << sc_time_stamp() << "\n";
+              << ", DST: " << decode_dest(trans.get_address()) << "\n";
 
     // Obliged to check the transaction attributes for unsupported features
     // and to generate the appropriate error response
@@ -182,13 +179,12 @@ void Memory::peq_cb(tlm::tlm_generic_payload& trans, const tlm::tlm_phase& phase
 
                 mem[adr] = *reinterpret_cast<int*>(ptr);
                 memOut = mem[adr];
-                cout << "MEMRIA!!!!!!!!: " << mem[adr];
 
                 std::cout << "********** Processing msg in Memory: " << name()
                           << ", Transaction: " << decode_transID(trans.get_address())
                           << ", Executing: WRITE"
                           << ", Addr: " << dec << adr
-                          << ", Data: " << *reinterpret_cast<int*>(ptr)
+                          << ", Data: " << mem[adr]
                           << ", SRC: " << decode_src(trans.get_address())
                           << ", DST: " << decode_dest(trans.get_address())
                           << ", Time: " << sc_time_stamp() << "\n";

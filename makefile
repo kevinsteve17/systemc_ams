@@ -28,10 +28,10 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 ARCH=$(shell getconf LONG_BIT)
 SYSCDIR=/usr/local/systemc-2.3.2
 LDLIBS_32= -L$(SYSCDIR)/lib-linux -lsystemc -lm
-LDLIBS_64= -L$(SYSCDIR)/lib-linux64 -lsystemc -lm
+LDLIBS_64= -L$(SYSCDIR)/lib-linux64 -L/usr/local/systemc-ams-2.1/lib-linux64 -lsystemc -lsystemc-ams -lm
 LDLIBS=$(LDLIBS_$(ARCH))
 
-CXXFLAGS = -Wno-deprecated -I$(SYSCDIR)/include -I$(INC_DIR)
+CXXFLAGS = -Wno-deprecated -I$(SYSCDIR)/include -I/usr/local/systemc-ams-2.1/include -I$(INC_DIR)
 CXX=g++
 
 $(BIN_DIR)/$(BIN_FILE).o: $(OBJ_FILES)
