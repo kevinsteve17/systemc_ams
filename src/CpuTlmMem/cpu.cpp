@@ -28,7 +28,7 @@ CPU::CPU(sc_core::sc_module_name module_name, unsigned int id)
     SC_THREAD(thread_process);
 }
 
-void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data, int addr)
+void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data, int addr, int transaction)
 {
 
     tlm::tlm_phase phase;
@@ -36,7 +36,7 @@ void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data, int ad
 
         int adr = addr;
 
-        adr = compose_address(0, cpu_id, TOP_ROUTER, adr);
+        adr = compose_address(transaction, cpu_id, TOP_ROUTER, adr);
 
         tlm::tlm_command cmd = tlm::TLM_WRITE_COMMAND; 
         
@@ -70,7 +70,7 @@ void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data, int ad
         delay = sc_time(rand_ps(), SC_PS);
         
         std::cout << ">>>>>>>>>> Outgoing msg from CPU: " << cpu_id
-                  << ", Transaction: " << 0
+                  << ", Transaction: " << transaction
                   << ", Phase: " << phase
                   << ", Cmd: " << (cmd ? 'W' : 'R')
                   << ", Addr: " << dec << decode_addr(adr)
@@ -119,38 +119,39 @@ void CPU::thread_process()
 {
     tlm::tlm_generic_payload* trans;
     int instruction = 0;
+    int transactionN = 0;
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(1, SC_MS));
     instruction = generateWaveGenInstruction(4,0,wave_type::sine,2,3,0);
-    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 4*sin(2k)
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR, transactionN++);  // --> 0 + 4*sin(2k)
 
     // Transaction to user mem sector
     wait(sc_time(0.5, SC_MS));
-    generateTransaction(trans, DUMMY_DATA, MEM_ADDR);
+    generateTransaction(trans, DUMMY_DATA, MEM_ADDR, transactionN++);
 
     // Transaction to MMIO XX DEVICE
     wait(sc_time(0.5, SC_MS));
-    generateTransaction(trans, DUMMY_DATA, MMIO_XX_DEVICE);
+    generateTransaction(trans, DUMMY_DATA, MMIO_XX_DEVICE, transactionN++);
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
     instruction = generateWaveGenInstruction(4,2,wave_type::sine,1,3,0);
-    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 3 + 4*sin(1k)  
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR, transactionN++);  // --> 3 + 4*sin(1k)  
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
     instruction = generateWaveGenInstruction(2,0,wave_type::triangular,10,3,0);
-    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 2*triang(10k)
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR, transactionN++);  // --> 0 + 2*triang(10k)
 
     // Transaction to user mem sector
     wait(sc_time(1, SC_MS));
-    generateTransaction(trans, DUMMY_DATA, MEM_ADDR);
+    generateTransaction(trans, DUMMY_DATA, MEM_ADDR, transactionN++);
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
     instruction = generateWaveGenInstruction(2,0,wave_type::square,5,3,0);
-    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 2*square(5k)         
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR, transactionN++);  // --> 0 + 2*square(5k)         
 }
 
 tlm::tlm_sync_enum CPU::nb_transport_bw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_time& delay)

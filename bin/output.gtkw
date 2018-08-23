@@ -1,14 +1,14 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Thu Aug 23 04:43:12 2018
+[*] Thu Aug 23 23:09:32 2018
 [*]
 [dumpfile] "/home/parisfe/Maestria/Diseno_de_alto_nivel/ams/systemc_ams/bin/proyecto3.vcd"
-[dumpfile_mtime] "Thu Aug 23 04:42:15 2018"
-[dumpfile_size] 84815665
+[dumpfile_mtime] "Thu Aug 23 22:21:56 2018"
+[dumpfile_size] 62236874
 [savefile] "/home/parisfe/Maestria/Diseno_de_alto_nivel/ams/systemc_ams/bin/output.gtkw"
 [timestart] 0
 [size] 1853 1025
-[pos] -29 -29
+[pos] -1 -1
 *-30.999983 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [sst_width] 223
 [signals_width] 182
@@ -23,11 +23,19 @@ SystemC_AMS.freq_multiplier
 SystemC_AMS.sel
 @8028
 SystemC_AMS.signal_gen_output
+@20000
+-
+-
 @20001
+-
+@20000
 -
 @8028
 SystemC_AMS.vload_output_signal
 @20000
+-
+-
+-
 -
 [pattern_trace] 1
 [pattern_trace] 0
