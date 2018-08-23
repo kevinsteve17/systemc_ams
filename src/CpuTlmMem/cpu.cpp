@@ -28,13 +28,13 @@ CPU::CPU(sc_core::sc_module_name module_name, unsigned int id)
     SC_THREAD(thread_process);
 }
 
-void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data)
+void CPU::generateTransaction(tlm::tlm_generic_payload* trans, int _data, int addr)
 {
 
     tlm::tlm_phase phase;
     sc_time delay;
 
-        int adr = 7;
+        int adr = addr;
 
         adr = compose_address(0, cpu_id, TOP_ROUTER, adr);
 
@@ -121,29 +121,29 @@ void CPU::thread_process()
     int instruction = 0;
 
     // amp, offset, sel, freq1, freq2, phase
-    wait(sc_time(1, SC_MS));
-    instruction = generateWaveGenInstruction(5,0,0,1,4,0);
-    generateTransaction(trans, instruction);  // --> 0 + 4*sin(2k)
-
-    // amp, offset, sel, freq1, freq2, phase
     /*wait(sc_time(1, SC_MS));
-    instruction = generateWaveGenInstruction(4,0,1,2,3,0);
-    generateTransaction(trans, instruction);  // --> 0 + 4*sin(2k)
+    instruction = generateWaveGenInstruction(5,0,0,1,4,0);
+    generateTransaction(trans, instruction);*/  // --> 0 + 4*sin(2k)
+
+    // amp, offset, sel, freq1, freq2, phase
+    wait(sc_time(1, SC_MS));
+    instruction = generateWaveGenInstruction(4,0,wave_type::sine,2,3,0);
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 4*sin(2k)
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
-    instruction = generateWaveGenInstruction(4,2,1,1,3,0);
-    generateTransaction(trans, instruction);  // --> 3 + 4*sin(1k)  
+    instruction = generateWaveGenInstruction(4,2,wave_type::sine,1,3,0);
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 3 + 4*sin(1k)  
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
-    instruction = generateWaveGenInstruction(2,0,2,10,3,0);
-    generateTransaction(trans, instruction);  // --> 0 + 2*triang(10k)
+    instruction = generateWaveGenInstruction(2,0,wave_type::triangular,10,3,0);
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 2*triang(10k)
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
-    instruction = generateWaveGenInstruction(2,0,0,5,3,0);
-    generateTransaction(trans, instruction);*/  // --> 0 + 2*square(5k)         
+    instruction = generateWaveGenInstruction(2,0,wave_type::square,5,3,0);
+    generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 2*square(5k)         
 }
 
 tlm::tlm_sync_enum CPU::nb_transport_bw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_time& delay)
@@ -154,7 +154,6 @@ tlm::tlm_sync_enum CPU::nb_transport_bw(tlm::tlm_generic_payload& trans, tlm::tl
               << ", Cmd: " << (trans.get_command() ? 'W' : 'R')
               << ", Addr: " << dec << decode_addr(trans.get_address())
               << ", Data: " << *reinterpret_cast<int*>(trans.get_data_ptr())
-              << ", Delay: " << delay
               << ", Time: " << sc_time_stamp() << "\n";
 
     m_payload_event_queue.notify(trans, phase, delay);

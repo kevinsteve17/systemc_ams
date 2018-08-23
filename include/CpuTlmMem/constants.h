@@ -21,6 +21,7 @@
 #define TOP_ROUTER          1
 #define MAX_NUM_CPU         (MAX_NUMBER_NODES - 1)
 #define MAX_NUM_ROUTER      MAX_NUMBER_NODES
+#define MMIO_WAVE_GEN_ADDR  0x32
 
 #define MEMORY_SIZE         256
 

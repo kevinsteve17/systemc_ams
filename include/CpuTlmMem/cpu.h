@@ -24,6 +24,15 @@
 
 #include "memory_manager.h"
 
+// Wave type
+enum wave_type
+{
+    square,
+    sine,
+    triangular,
+    sawtooth
+};
+
 class CPU: public sc_module
 {
     public:
@@ -36,7 +45,7 @@ class CPU: public sc_module
 
         int generateWaveGenInstruction(int amp, int offset, int sel, int freq1, int freq2, int phase);
 
-        void generateTransaction(tlm::tlm_generic_payload* trans, int data);
+        void generateTransaction(tlm::tlm_generic_payload* trans, int data, int addr);
 
         virtual tlm::tlm_sync_enum nb_transport_bw( tlm::tlm_generic_payload& trans,
                                                     tlm::tlm_phase& phase, sc_time& delay);

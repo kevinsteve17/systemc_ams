@@ -178,7 +178,7 @@ void Memory::peq_cb(tlm::tlm_generic_payload& trans, const tlm::tlm_phase& phase
             else if ( cmd == tlm::TLM_WRITE_COMMAND ) {
 
                 mem[adr] = *reinterpret_cast<int*>(ptr);
-                memOut = mem[adr];
+                memOut = mem[MMIO_WAVE_GEN_ADDR];
 
                 std::cout << "********** Processing msg in Memory: " << name()
                           << ", Transaction: " << decode_transID(trans.get_address())
