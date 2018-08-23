@@ -122,6 +122,11 @@ void CPU::thread_process()
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(1, SC_MS));
+    instruction = generateWaveGenInstruction(5,0,0,1,4,0);
+    generateTransaction(trans, instruction);  // --> 0 + 4*sin(2k)
+
+    // amp, offset, sel, freq1, freq2, phase
+    /*wait(sc_time(1, SC_MS));
     instruction = generateWaveGenInstruction(4,0,1,2,3,0);
     generateTransaction(trans, instruction);  // --> 0 + 4*sin(2k)
 
@@ -138,7 +143,7 @@ void CPU::thread_process()
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
     instruction = generateWaveGenInstruction(2,0,0,5,3,0);
-    generateTransaction(trans, instruction);  // --> 0 + 2*square(5k)         
+    generateTransaction(trans, instruction);*/  // --> 0 + 2*square(5k)         
 }
 
 tlm::tlm_sync_enum CPU::nb_transport_bw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_time& delay)
