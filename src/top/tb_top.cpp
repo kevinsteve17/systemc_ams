@@ -91,7 +91,7 @@ int sc_main(int argc, char* argv[])
     sca_trace(wf, vload, "vload_output_signal");
 
     // start sim
-    sc_start(10,SC_MS);
+    sc_start(11,SC_MS);
 
     cout << "@" << sc_time_stamp() <<" Terminating simulation\n" << endl;
     sca_util::sca_close_vcd_trace_file(wf);

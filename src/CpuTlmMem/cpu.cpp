@@ -121,14 +121,17 @@ void CPU::thread_process()
     int instruction = 0;
 
     // amp, offset, sel, freq1, freq2, phase
-    /*wait(sc_time(1, SC_MS));
-    instruction = generateWaveGenInstruction(5,0,0,1,4,0);
-    generateTransaction(trans, instruction);*/  // --> 0 + 4*sin(2k)
-
-    // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(1, SC_MS));
     instruction = generateWaveGenInstruction(4,0,wave_type::sine,2,3,0);
     generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 4*sin(2k)
+
+    // Transaction to user mem sector
+    wait(sc_time(0.5, SC_MS));
+    generateTransaction(trans, DUMMY_DATA, MEM_ADDR);
+
+    // Transaction to MMIO XX DEVICE
+    wait(sc_time(0.5, SC_MS));
+    generateTransaction(trans, DUMMY_DATA, MMIO_XX_DEVICE);
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));
@@ -139,6 +142,10 @@ void CPU::thread_process()
     wait(sc_time(2, SC_MS));
     instruction = generateWaveGenInstruction(2,0,wave_type::triangular,10,3,0);
     generateTransaction(trans, instruction, MMIO_WAVE_GEN_ADDR);  // --> 0 + 2*triang(10k)
+
+    // Transaction to user mem sector
+    wait(sc_time(1, SC_MS));
+    generateTransaction(trans, DUMMY_DATA, MEM_ADDR);
 
     // amp, offset, sel, freq1, freq2, phase
     wait(sc_time(2, SC_MS));

@@ -22,6 +22,9 @@
 #define MAX_NUM_CPU         (MAX_NUMBER_NODES - 1)
 #define MAX_NUM_ROUTER      MAX_NUMBER_NODES
 #define MMIO_WAVE_GEN_ADDR  0x32
+#define MMIO_XX_DEVICE      0x20
+#define MEM_ADDR            0x70
+#define DUMMY_DATA          0xFF
 
 #define MEMORY_SIZE         256
 
